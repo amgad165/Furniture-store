@@ -1,0 +1,449 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- <link rel="shortcut icon" href="favicon.png"> -->
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+  <title>Salem-arts</title>
+
+		<!-- Bootstrap CSS -->
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        
+        
+        <!-- organi styles -->
+        <link href="{% static 'css/jquery-ui.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/shopping.css' %}" rel="stylesheet">
+
+<style>
+
+
+#shop_a:before {
+        
+        
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 8px;
+    right: 8px;
+    background: #81562B;
+    height: 5px;
+    opacity: 1;
+    visibility: visible;
+    width: 0;
+    -webkit-transition: .15s all ease-out;
+    -o-transition: .15s all ease-out;
+    transition: .15s all ease-out;
+    width: calc(100% - 16px);
+        } 
+#shop_a {
+    opacity: 1;
+        
+        } 
+       
+</style>
+        
+ </head>
+<body>
+			<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="{% url 'home' %}"><img width="70px" src="{% static 'images/arabic.png' %}" alt=""> Salem-Arts<span>.</span></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<ul class="custom-navbar-nav navbar-nav me-auto ms-auto mb-2 mb-md-0">
+						<li class="nav-item ">
+							<a class="nav-link" href="{% url 'home' %}">Home</a>
+						</li>
+						
+                            <li class="nav-item dropdown shopping_link">
+							<a id="shop_a" class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								Shop
+							</a>
+							<div class="dropdown-menu shop_dropdown" aria-labelledby="shopDropdown">
+								<a class="dropdown-item" href="{% url 'shop' 'living' %}">Living Rooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'dining' %}">Dining Rooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'bedrooms' %}">Bedrooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'offices' %}">Offices</a>
+								<a class="dropdown-item" href="{% url 'shop' 'kitchens' %}">Kitchens</a>
+								<a class="dropdown-item" href="{% url 'shop' 'dressing' %}">Dressing rooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'chairs' %}">Seats and Chairs</a>
+								<a class="dropdown-item" href="{% url 'shop' 'hangings' %}">Hangings</a>
+								<a class="dropdown-item" href="{% url 'shop' 'accessories' %}">Accessories</a>
+								<a class="dropdown-item" href="{% url 'shop' 'tables' %}">Tables</a>
+								<a class="dropdown-item" href="{% url 'shop' 'doors' %}">Doors</a>
+								<a class="dropdown-item" href="{% url 'shop' 'paravans' %}">Paravans</a>
+
+								<!-- Add more categories as needed -->
+							</div>
+						</li>	                        
+						{% if user.is_authenticated %}
+						<li ><a class="nav-link" href="{% url 'orders' %}">Orders</a></li>
+
+						{% endif %}
+
+
+						{% if user.is_superuser %}
+						<li ><a class="nav-link" href="{% url 'admin:index' %}">Admin</a></li>
+
+						{% endif %}
+
+						{% if user.is_superuser %}
+						<li ><a class="nav-link" href="{% url 'analysis' %}">Analysis</a></li>
+
+						{% endif %}
+
+						<li ><a class="nav-link" href="{% url 'about_us' %}">About us</a></li>
+						<li><a class="nav-link" href="{% url 'contact_us' %}">Contact us</a></li>  
+
+						<!-- <li><a class="nav-link" href="services.html">Services</a></li>
+						<li><a class="nav-link" href="blog.html">Blog</a></li>-->
+					</ul>
+
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+
+						<li class="nav-item dropdown" id="userDropdown">
+							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fa fa-user"></i>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="userDropdown">
+					{% if user.is_authenticated %}
+						<li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+
+							{% else %}
+						<li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+						<li><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
+
+							{% endif %}
+
+							</ul>
+						</li>
+
+
+
+
+						<li id="cart-icon" class="nav-item">
+							<a class="nav-link" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i></a>
+							{% if total_quantity %}
+								<span id="cart-badge">{{ total_quantity }}</span>
+							{% endif %}
+						</li>
+						</ul>
+
+				</div>
+			</div>
+				
+		</nav>
+		<!-- End Header/Navigation -->
+
+
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <!-- <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">{{category}}</li>
+                </ol>
+              </nav> -->
+            <div class="row">
+                <div class="col-lg-3 col-md-5 sidebar_custom">
+                    <div class="sidebar">
+                        
+                        <div class="sidebar__item">
+                            <h4 class="category-header collapsed" id="categoryHeader">
+                                Categories
+                                <i style="margin-left: 10px;" class="fas fa-caret-down"></i>
+                            </h4>
+                            <ul class="category-list">
+                                <li id="living"><a href="{% url 'shop' 'living' %}">Living Rooms</a></li>
+                                <li id="dining"><a href="{% url 'shop' 'dining' %}">Dining Rooms</a></li>
+                                <li id="bedrooms"><a href="{% url 'shop' 'bedrooms' %}">Bedroom</a></li>
+                                <li id="offices"><a href="{% url 'shop' 'offices' %}">Offices</a></li>
+                                <li id="kitchens"><a href="{% url 'shop' 'kitchens' %}">Kitchen</a></li>
+                                <li id="dressing"><a href="{% url 'shop' 'dressing' %}">Dressing</a></li>
+                                <li id="chairs"><a href="{% url 'shop' 'chairs' %}">Seats and chairs</a></li>
+                                <li id="hangings"><a href="{% url 'shop' 'hangings' %}">Hangings</a></li>
+                                <li id="accessories"><a href="{% url 'shop' 'accessories' %}">Accessories</a></li>
+                                <li id="tables"><a href="{% url 'shop' 'tables' %}">Tables</a></li>
+                                <li id="doors"><a href="{% url 'shop' 'doors' %}">Doors</a></li>
+                                <li id="paravans"><a href="{% url 'shop' 'paravans' %}">Paravans</a></li>
+                            </ul>
+                        </div>
+                        <form method="GET">
+
+
+                        {% if lowest_price %}
+                       
+                        <div class="sidebar__item">
+                            <h4>Price</h4>
+                            <div class="price-range-wrap">
+                                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                                    data-min="{{ lowest_price|floatformat:"-0" }}" data-max="{{ highest_price|floatformat:"-0" }}">
+                                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                                </div>
+                                <div class="range-slider">
+                                    <div class="price-input">
+                                        <input name="min_price" type="text" id="minamount">
+                                        <input style="max-width: 10%;" type="text" value="──">
+                                        <input name="max_price" type="text" id="maxamount">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        
+                        <div class="sidebar__item sidebar__item__color--option">
+                            {% if color_counts %}
+                            <h4>Colors</h4>
+                            
+                                <div class="row">
+                                    {% for color_count in color_counts %}
+                                        <div class="col-md-6">
+                                            <label class="color-checkbox">
+                                                <input class="form-check-input" type="checkbox" name="colors" value="{{ color_count.name }}">
+                                                <span class="color-circle" style="background: {{ color_count.hex_code }}"></span>
+                                                &nbsp {{ color_count.name }} ({{ color_count.count }})
+                                            </label>
+                                        </div>
+                                        {% if forloop.counter|divisibleby:2 %}
+                                    </div>
+                                    <div class="row">
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                             <a style="margin-right: 10px;" href="{% url 'shop' category %}"><button style="background-color: #81562B;" class="btn btn-primary" type="button">Reset</button></a>   
+
+                                <button  class="btn btn-primary" type="submit">Apply</button>
+
+                        </div>
+                             
+                        
+                    </form>
+
+        
+            
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-7">
+          
+                    <div class="filter__item">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="filter__sort">
+                                    <span>{{category}}</span>
+                           
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4">
+                                <div class="filter__found">
+                                    <h6><span>{{products_count}}</span> Products found</h6>
+                                </div>
+                            </div>
+                    
+                        </div>
+                    </div>
+
+                    <!-- product section -->
+                    <div class="untree_co-section product-section before-footer-section">
+                        <div class="container">
+                              <div class="row">
+                                {% for product in products %}
+                                  <!-- Start Column  -->
+                                <div class="col-12 col-md-4 col-lg-3 mb-5">
+                                    <a class="product-item" href="{% url 'product_detail' product.id %}">
+                                        <img src="{{ MEDIA_URL }}{{ product.main_image.url }}" class="img-fluid product-thumbnail">
+                                        <h3 class="product-title">{{ product.name }}</h3>
+                                        <strong class="product-price">{{ product.price }} EGP</strong>
+            
+                                        <span class="icon-cross">
+                                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                                        </span>
+                                    </a>
+                                </div> 
+                                <!-- End Column  -->
+                                    
+                                {% endfor %}
+            
+                              </div>
+                              
+                              <div class="product__pagination text-center">
+                                <span class="step-links">
+                                    <div>
+                                        <span class="current-page">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+                                    </div>
+                                    <div class="pagination-container justify-content-center">
+                                        <div class="pagination_1">
+                                            {% if products.has_previous %}
+                                            <a href="?page=1" class="pagination-link">&laquo; First</a>
+                                            <a href="?page={{ products.previous_page_number }}" class="pagination-link">Previous</a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="pagination_2">
+                                            {% if products.has_next %}
+                                            <a href="?page={{ products.next_page_number }}" class="pagination-link">Next</a>
+                                            <a href="?page={{ products.paginator.num_pages }}" class="pagination-link">Last &raquo;</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                            
+                        </div>
+                        </div>
+             
+
+          
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
+
+   
+		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
+
+				<div class="sofa-img">
+					<img src="{% static 'images/sofa.png' %}" alt="Image" class="img-fluid">
+				</div>
+
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="subscription-form">
+
+				
+
+						</div>
+					</div>
+				</div>
+
+				<div class="row g-5 mb-5">
+					<div class="col-lg-4">
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Salem-Arts<span>.</span></a></div>
+						<p class="mb-4">70 years of experience in the field of woodwork industry 
+                            Our furniture is handmade so you will own a piece of art in your home
+                            Inlaying our furniture with natural materials ( copper and seashell ) </p>
+
+						<ul class="list-unstyled custom-social">
+							<li><a href="https://www.facebook.com/SalemArt99?mibextid=ZbWKwL"><span class="fa fa-brands fa-facebook-f"></span></a></li>
+							<li><a href="https://www.behance.net/salemart1"><span class="fa fa-brands fa-behance"></span></a></li>
+							<li><a href="https://www.instagram.com/salemart1955"><span class="fa fa-brands fa-instagram"></span></a></li>
+							<li><a href="https://www.linkedin.com/in/salem-art-045b44293/"><span class="fa fa-brands fa-linkedin"></span></a></li>
+						</ul>
+					</div>
+
+					<div class="col-lg-8">
+						<div class="row links-wrap">
+							<div class="col-6 col-sm-6 col-md-3">
+					
+							</div>
+							<div class="col-6 col-sm-6 col-md-6">
+								<ul class="list-unstyled">
+									<li><a href="{% url 'home' %}">Home</a></li>
+                                    <li><a href="{% url 'shop' 'living' %}">Shop</a></li>
+									<li><a href="{% url 'about_us' %}">About us</a></li>
+									<li><a href="{% url 'contact_us' %}">Contact us</a></li>
+								</ul>
+							</div>
+
+		
+
+		
+
+			
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>
+		</footer>
+
+
+
+    <!-- Js Plugins -->
+    
+ 
+
+		<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+		<script src="{% static 'js/custom.js' %}"></script>
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+        <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+        <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+
+        <script src="{% static 'js/shop.js' %}"></script>
+
+
+    <!--  custom script  -->
+
+    <!-- active feature -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all list items
+        var listItems = document.querySelectorAll("ul li");
+
+        // Get the activeId value from Django template variable
+        var activeId = "{{ category }}";
+
+        // Loop through the list items and add the "side_active" class to the matching one
+        listItems.forEach(function (item) {
+            if (item.id === activeId) {
+                item.classList.add("side_active");
+            }
+        });
+    });
+</script>
+
+<!-- collapsing feature -->
+<script>
+    const categoryHeader = document.getElementById("categoryHeader");
+    const categoryList = document.querySelector(".category-list");
+    const headerIcon = document.querySelector(".category-header .fa");
+
+    categoryHeader.addEventListener("click", function () {
+        if (categoryHeader.classList.contains("collapsed")) {
+            categoryHeader.classList.remove("collapsed");
+            headerIcon.classList.remove("fa-rotate-90");
+            categoryList.style.maxHeight = categoryList.scrollHeight + "px";
+        } else {
+            categoryHeader.classList.add("collapsed");
+            headerIcon.classList.add("fa-rotate-90");
+            categoryList.style.maxHeight = null;
+        }
+    });
+</script>
+
+
+
+    
+</body>
+
+
+
+
+
+
+</html>

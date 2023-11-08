@@ -1,0 +1,461 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+
+		<!-- Bootstrap CSS -->
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+<link href="{% static 'css/cart.css' %}" rel="stylesheet">
+
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+		<title>Salem-Arts</title>
+
+
+<style>
+	.site-blocks-table{
+		font-family: "Inter", sans-serif;
+		font-size: 20px;
+	}	
+</style>		
+	</head>
+
+	<body>
+			<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="{% url 'home' %}"><img width="70px" src="{% static 'images/arabic.png' %}" alt=""> Salem-Arts<span>.</span></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<ul class="custom-navbar-nav navbar-nav me-auto ms-auto mb-2 mb-md-0">
+						<li class="nav-item ">
+							<a class="nav-link" href="{% url 'home' %}">Home</a>
+						</li>
+						
+							<li class="nav-item dropdown ">
+							<a class="nav-link dropdown-toggle" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								Shop
+							</a>
+							<div class="dropdown-menu shop_dropdown" aria-labelledby="shopDropdown">
+								<a class="dropdown-item" href="{% url 'shop' 'living' %}">Living Rooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'dining' %}">Dining Rooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'bedrooms' %}">Bedrooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'offices' %}">Offices</a>
+								<a class="dropdown-item" href="{% url 'shop' 'kitchens' %}">Kitchens</a>
+								<a class="dropdown-item" href="{% url 'shop' 'dressing' %}">Dressing rooms</a>
+								<a class="dropdown-item" href="{% url 'shop' 'chairs' %}">Seats and Chairs</a>
+								<a class="dropdown-item" href="{% url 'shop' 'hangings' %}">Hangings</a>
+								<a class="dropdown-item" href="{% url 'shop' 'accessories' %}">Accessories</a>
+								<a class="dropdown-item" href="{% url 'shop' 'tables' %}">Tables</a>
+								<a class="dropdown-item" href="{% url 'shop' 'doors' %}">Doors</a>
+								<a class="dropdown-item" href="{% url 'shop' 'paravans' %}">Paravans</a>
+
+							</div>
+						</li>	
+
+						
+						{% if user.is_authenticated %}
+						<li ><a class="nav-link" href="{% url 'orders' %}">Orders</a></li>
+
+						{% endif %}
+
+
+						{% if user.is_superuser %}
+						<li ><a class="nav-link" href="{% url 'admin:index' %}">Admin</a></li>
+
+						{% endif %}
+
+						{% if user.is_superuser %}
+						<li ><a class="nav-link" href="{% url 'analysis' %}">Analysis</a></li>
+
+						{% endif %}
+
+						<li ><a class="nav-link" href="{% url 'about_us' %}">About us</a></li>
+						<li><a class="nav-link" href="{% url 'contact_us' %}">Contact us</a></li>  
+
+						<!-- <li><a class="nav-link" href="services.html">Services</a></li>
+						<li><a class="nav-link" href="blog.html">Blog</a></li>-->
+					</ul>
+
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+
+						<li class="nav-item dropdown" id="userDropdown">
+							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fa fa-user"></i>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="userDropdown">
+								{% if user.is_authenticated %}
+						<li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+
+							{% else %}
+						<li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+						<li><a class="dropdown-item" href="{% url 'signup' %}">Sign Up</a></li>
+
+							{% endif %}
+
+							</ul>
+						</li>
+
+
+
+
+						<li id="cart-icon" class="nav-item">
+							<a class="nav-link" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i></a>
+							{% if total_quantity %}
+								<span id="cart-badge">{{ total_quantity }}</span>
+							{% endif %}
+						</li>
+						</ul>
+
+				</div>
+			</div>
+				
+		</nav>
+		<!-- End Header/Navigation -->
+
+	
+		<div class="wrap cf">
+			<div class="heading cf">
+			  <h1>My Cart</h1>
+			  <form action="{% url "update_cart" %}" method="post" id="update-cart-form">
+
+			  {% csrf_token %}
+			  <a style="margin-left: 10px;" href="{% url 'home' %}" class="continue">Continue Shopping</a>
+
+			  <button type="submit" class="btn submit-button">Update Cart</button>
+
+			</div>
+			<div class="cart">
+
+			  <ul class="cartWrap">
+				{% for order_item in order_items %}
+				<li class="items odd">
+				  
+			  <div class="infoWrap"> 
+				  <div class="cartSection">
+				  <a href="{% url 'product_detail' order_item.product.id %}">
+				  <img src="{{ order_item.product.main_image.url }}" alt="" class="itemImg" />
+				</a>
+					<h3>{{ order_item.product.name }}</h3>
+				  
+					 <p> <input name="quantity" type="text" value="{{ order_item.quantity }}" class="qty" placeholder="{{ order_item.quantity }}"/> x <span class="small-currency">EGP</span>{{ order_item.product.price }}</p>
+					 <input type="hidden" name="product_id" value="{{ order_item.product.id }}">
+
+					
+				  </div>  
+			  
+				  
+				  <div class="prodTotal cartSection">
+					<p><span class="small-currency">EGP</span>{{ order_item.get_total_item_price }}</p>
+				  </div>
+				  &nbsp;
+						<div class="cartSection removeWrap">
+					 <a href="#" class="remove" data-product-id="{{ order_item.product.id }}">x</a>
+				  </div>
+				</div>
+				</li>
+
+				{% endfor %}
+
+				
+				
+				<!--<li class="items even">Item 2</li>-->
+		   
+			  </ul>
+			</div>
+			
+
+			
+			<div class="subtotal cf">
+			  <ul class="list-unstyled">
+
+				
+				<li class="totalRow final"><span class="label">Total</span>
+					<span id="final-total" class="value">EGP {{total_price}}
+					</span></li>
+				<li class="totalRow"><a href="{% url 'confirm_order' %}" class="btn continue">Confirm your Order</a>
+				</li>
+			  </ul>
+			</div>
+		</form>
+		  </div>
+		
+<!-- 
+		<div class="untree_co-section before-footer-section">
+            <div class="container">
+              <div class="row mb-5">
+                
+                  <div class="site-blocks-table">
+					<form action="{% url "update_cart" %}" method="post" id="update-cart-form">
+						{% csrf_token %}
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="product-thumbnail">Image</th>
+									<th class="product-name">Product</th>
+									<th class="product-price">Price</th>
+									<th class="product-quantity">Quantity</th>
+									<th class="product-total">Total</th>
+									<th class="product-remove">Remove</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for order_item in order_items %}
+								<tr>
+									<td class="product-thumbnail">
+										<img src="{{ order_item.product.main_image.url }}" alt="Image" class="img-fluid">
+									</td>
+									<td class="product-name">
+										<h4 class="text-black">{{ order_item.product.name }}</h4>
+									</td>
+									<td><span class="small-currency">EGP</span>{{ order_item.product.price }}</td>
+									<td>
+										<div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
+											<div class="input-group-prepend">
+												<button class="btn btn-outline-black decrease" type="button">&minus;</button>
+											</div>
+											<input type="text" name="quantity" class="form-control text-center quantity-amount" value="{{ order_item.quantity }}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+											<input type="hidden" name="product_id" value="{{ order_item.product.id }}">
+											<div class="input-group-append">
+												<button class="btn btn-outline-black increase" type="button">&plus;</button>
+											</div>
+										</div>
+									</td>
+									<td><span class="small-currency">EGP</span>{{ order_item.get_total_item_price }}</td>
+									<td><a href="#" class="btn btn-black btn-sm">X</a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					
+
+                  </div>
+                
+              </div>
+        
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row mb-5">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                      <button id="update-cart-button" class="btn btn-black btn-sm btn-block">Update Cart</button>
+                    </div>
+                    <div class="col-md-6">
+                      <button type="submit" class="btn btn-black btn-sm btn-block">Continue Shopping</button>
+                    </div>
+                  </div>
+
+                </div>
+				
+			</form>
+
+			<div class="col-1"></div>
+                <div class="col-md-5 pl-5">
+                  <div class="row justify-content-end">
+                    <div class="col-md-7">
+                      <div class="row">
+                        <div class="col-md-12 border-bottom mb-3">
+                          <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                        </div>
+                      </div>
+              
+                      <div class="row mb-5">
+				
+                        <div class="col-md-8 text-left">
+                          <h2 class="text-black"><span class="small-currency">EGP</span> {{total_price}}</h2>
+                        </div>
+                      </div>
+        
+					</div>
+                        <div class="col-md-5">
+                          <button class="btn btn-black btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Confirm Your Order</button>
+                        </div>
+                     
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+		
+		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
+
+				<div class="sofa-img">
+				
+					<img src="{% static 'images/sofa.png' %}" alt="Image" class="img-fluid">
+				</div>
+
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="subscription-form">
+
+				
+
+						</div>
+					</div>
+				</div>
+
+				<div class="row g-5 mb-5">
+					<div class="col-lg-4">
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Salem-Arts<span>.</span></a></div>
+						<p class="mb-4">70 years of experience in the field of woodwork industry 
+							Our furniture is handmade so you will own a piece of art in your home
+							Inlaying our furniture with natural materials ( copper and seashell ) </p>
+
+						<ul class="list-unstyled custom-social">
+							<li><a href="https://www.facebook.com/SalemArt99?mibextid=ZbWKwL"><span class="fa fa-brands fa-facebook-f"></span></a></li>
+							<li><a href="https://www.behance.net/salemart1"><span class="fa fa-brands fa-behance"></span></a></li>
+							<li><a href="https://www.instagram.com/salemart1955"><span class="fa fa-brands fa-instagram"></span></a></li>
+							<li><a href="https://www.linkedin.com/in/salem-art-045b44293/"><span class="fa fa-brands fa-linkedin"></span></a></li>
+						</ul>
+					</div>
+
+					<div class="col-lg-8">
+						<div class="row links-wrap">
+							<div class="col-6 col-sm-6 col-md-3">
+					
+							</div>
+							<div class="col-6 col-sm-6 col-md-6">
+								<ul class="list-unstyled">
+									<li><a href="{% url 'home' %}">Home</a></li>
+                                    <li><a href="{% url 'shop' 'living' %}">Shop</a></li>
+									<li><a href="{% url 'about_us' %}">About us</a></li>
+									<li><a href="{% url 'contact_us' %}">Contact us</a></li>
+								</ul>
+							</div>
+
+		
+
+		
+
+			
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>
+		</footer>
+		<!-- End Footer Section -->	
+
+
+		<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+		<script src="{% static 'js/tiny-slider.js' %}"></script>
+
+		<script src="{% static 'js/custom.js' %}"></script>
+
+
+		<script src="{% static 'js/jquery.min.js' %}"></script>
+
+
+
+		<script>
+			
+			// Remove Items From Cart
+$('a.remove').click(function(){
+  event.preventDefault();
+
+  $(this).parent().parent().parent().hide(400, function() {
+    $(this).remove();
+});
+//   $( this ).parent().parent().parent().hide( 400 );
+//   $( this ).parent().parent().parent().remove();
+
+})
+
+// // Just for testing, show all items
+//   $('a.btn.continue').click(function(){
+//     $('li.items').show(400);
+//   })
+
+		</script>
+
+<script>
+    $(document).ready(function() {
+        $('.remove').on('click', function(e) {
+            e.preventDefault();
+            var product_id = $(this).data('product-id');
+			var data = {
+				product_id: product_id,
+				'csrfmiddlewaretoken': '{{ csrf_token }}'        
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "remove_item" %}',
+				data: data,
+				
+                success: function(data) {
+                    // Update the total price
+					var total_price = parseFloat(data.total_price);
+
+                    $('#final-total').text('EGP ' + total_price.toFixed(1));
+
+					var totalQuantity = data.cart_items_count;
+
+					// Display the badge and animate it
+					$('#cart-badge').text(totalQuantity).show().animate({
+							fontSize: '16px',
+						}, 200).animate({
+							fontSize: '12px',
+						}, 200);
+
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
+<!-- 
+		<script>
+$(document).ready(function() {
+    $('#update-cart-button').on('click', function() {
+        var csrfToken = $('[name=csrfmiddlewaretoken]').val();  // Get the CSRF token from a hidden input field
+
+        var formData = $('#update-cart-form').serialize();
+		
+        formData += '&csrfmiddlewaretoken=' + csrfToken;  // Add the CSRF token to the formData
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "update_cart" %}',  // Replace with the actual URL
+            data: formData,
+
+            success: function(data) {
+                // Handle a successful response, e.g., display a success message
+                alert(data.message);
+            },
+            error: function(xhr) {
+                // Handle an error response, e.g., display an error message
+                alert('Error: ' + xhr.responseText);
+            }
+        });
+    });
+});
+		</script> -->
+
+
+
+
+	</body>
+
+</html>

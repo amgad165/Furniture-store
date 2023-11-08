@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>orders_handling</title>
+    <link href="{% static 'css/settings/sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Main sidebar -->
+    <div class="msb" id="msb">
+        <nav class="navbar navbar-expand-lg navbar-light" role="navigation">
+            <div class="container">
+    
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+    
+                <div class="collapse navbar-collapse" id="navbarNav">
+                       <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link navbar-brand" href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'analysis' %}"><i class="fas fa-chart-bar"></i> Analysis</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{% url 'add_colors' %}"><i class="fa-solid fa-palette"></i> Add Colors</a>
+                        </li>
+                        <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'orders_handling' %}"><i class="fa-solid fa-list"></i> Orders handling</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{% url 'add_product' %}"><i class="fa-solid fa-shop"></i> Add New Product </a>
+                            </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{% url 'add_product_images' %}"><i class="fa-solid fa-image"></i> Add Product Images</a>
+                            </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="{% url 'messages' %}"><i class="fa-solid fa-message"></i> Contact Messages</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main content wrapper -->
+    <div style="margin-top: 50px;" class="">
+        <!-- Main content view -->
+        <div class="cv ">
+            <div class="inbox">
+                <div class="inbox-sb"></div>
+                <div class="inbox-bx container">
+                    <div class="row">
+                    <!-- Display the error message alert -->
+{% if error_message %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error_message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<!-- Display the success message alert -->
+{% if success_message %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ success_message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+
+                      <div class="col-lg-2 col-xl-1"></div>
+                        <div class="col-lg-10 col-xl-11 col-12">
+
+    <h1>Add Product Images</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="productSelect" class="form-label">Select a product</label>
+            <select required class="form-select" id="productSelect" name="product">
+                <option value="" disabled selected>Select a product</option>
+                {% for product in products %}
+                <option value="{{ product.id }}">{{ product.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="imageInput" class="form-label">Upload Images</label>
+            <input required type="file" class="form-control" id="imageInput" name="images" multiple>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+
+
+<!-- Include the following JavaScript at the end of your HTML file -->
+ <script>
+    // Automatically close the alerts after 5 seconds (5000 milliseconds)
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('.alert').alert('close');
+        }, 3000);
+    });
+</script> 
+
+
+</body>
+</html>
